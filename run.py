@@ -9,15 +9,21 @@ import yaml
 from configtree import Loader, Tree
 from app import selenium
 from app import notification
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 
-# def run():
-#     for url in configs['URL']:
-#         pass
-#         """
-#         if selenium.get_retail_info(url):
-#             notification(key, url)
-#         """
+def cronjob():
+    """ Cronjob """
+    for url in configs['urls']:
+        logging.info(f"Cron: {url}")
+        if selenium.is_selling(url):
+            logging.info(f"{url} is on stock!!")
+            if telegram.send_message(url):
+                logging.info(f"Success to send message for {url}")
+            else:
+                logging.info(f"Failed to send message for {url}")
+        else:
+            logging.info(f"{url} is out of stock!!")
 
 
 if __name__ == "__main__":
@@ -37,7 +43,6 @@ if __name__ == "__main__":
     logging.info("Initializing selenium chrome driver...")
     selenium = selenium.ChromeSelenium()
     logging.info("Succeed to create chrome driver!!")
-    selenium.is_selling(configs["URL"][0])
 
     # Initialize notification
     logging.info(f"Initializing telegram...")
@@ -45,7 +50,8 @@ if __name__ == "__main__":
         auth=configs["telegram.auth"], bot_id=configs["telegram.bot_id"])
     logging.info("Succeed to create telegram!!")
 
-    telegram.send_message(
-        "https://smartstore.naver.com/sangkong/products/4762917002")
-
-    # runcron('period', 'run')
+    # Run cronjob
+    scheduler = BlockingScheduler()
+    scheduler.add_job(cronjob, 'interval',
+                      seconds=configs["cron.interval"], timezone="Asia/Seoul")
+    scheduler.start()

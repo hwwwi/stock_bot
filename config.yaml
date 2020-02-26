@@ -1,6 +1,9 @@
-URL:
+urls:
   - "https://smartstore.naver.com/sangkong/products/4762917002"
 
 telegram:
-  auth: <need override>
-  bot_id: <need override>
+  auth: # <need override>
+  bot_id: #<need override>
+
+cron:
+  interval: 10
