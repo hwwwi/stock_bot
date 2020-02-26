@@ -8,5 +8,6 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "./:/opt/app"
+    shm_size: "2gb"
     command: python /opt/app/app.py
     restart: always
