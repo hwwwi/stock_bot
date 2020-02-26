@@ -25,8 +25,40 @@ class ChromeSelenium(object):
 
         return chrome_driver
 
+    def move_page(self, url):
+        """
+        Move browser page
+        It will wait for 5 second to move
+        """
+        self.browser.get(url)
+        for i in range(10):
+            if self.browser.current_url == url:
+                return True
+            else:
+                time.sleep(0.5)
+        return False
+
+    def wait_element_by_xpath(self, xpath):
+        try:
+            element = WebDriverWait(self.browser, 5).until(
+                EC.presence_of_element_located((By.XPATH, xpath)))
+            return element
+        except TimeoutException:
+            return None
+
     def is_selling(self, url):
         """ Check if product is selling """
 
         logging.info(f'Check URL: {url}')
-        # {self.browser.current_url}
+
+        # Move page
+        if not self.move_page(url):
+            return False
+
+        # Check product in stock
+        buy_btn = self.wait_element_by_xpath(
+            "//div[@class='btn_order' | @class='btn_order v2']/span[@class='buy']")
+        if buy_btn:
+            return buy_btn.find_element_by_xpath(".//a").get_attribute('class') != "_stopDefault"
+        else:
+            return False
