@@ -9,5 +9,6 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "./:/opt/app"
     shm_size: "2gb"
-    command: python /opt/app/app.py
+    working_dir: /opt/app
+    command: python /opt/app/run.py
     restart: always
