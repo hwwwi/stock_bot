@@ -45,4 +45,7 @@ if __name__ == "__main__":
         auth=configs["telegram.auth"], bot_id=configs["telegram.bot_id"])
     logging.info("Succeed to create telegram!!")
 
+    telegram.send_message(
+        "https://smartstore.naver.com/sangkong/products/4762917002")
+
     # runcron('period', 'run')
