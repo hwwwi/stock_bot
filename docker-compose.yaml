@@ -1,0 +1,12 @@
+version: "3"
+services:
+  mask-crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./:/opt/app"
+    command: python /opt/app/app.py
+    restart: always
