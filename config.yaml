@@ -7,3 +7,4 @@ telegram:
 
 cron:
   interval: 10
+  max_instance: 15

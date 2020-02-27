@@ -53,5 +53,7 @@ if __name__ == "__main__":
     # Run cronjob
     scheduler = BlockingScheduler()
     scheduler.add_job(cronjob, 'interval',
-                      seconds=configs["cron.interval"], timezone="Asia/Seoul")
+                      seconds=configs["cron.interval"],
+                      timezone="Asia/Seoul",
+                      max_instances=configs["cron.max_instance"])
     scheduler.start()
